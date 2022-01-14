@@ -1,3 +1,5 @@
+using EPAM.DreamTour.DataAccess.Data;
+using EPAM.DreamTour.DataAccess.DbAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,6 +26,10 @@ namespace EPAM.DreamTour
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddMvc();
+
+            services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
+            services.AddSingleton<ITourData, TourData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
