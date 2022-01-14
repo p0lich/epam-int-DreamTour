@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace EPAM.DreamTour.DataAccess.Data
 {
-    public class TourData
+    public class TourData : ITourData
     {
         private readonly ISqlDataAccess _sqlDataAccess;
 
@@ -27,6 +27,16 @@ namespace EPAM.DreamTour.DataAccess.Data
             var tour = await _sqlDataAccess.LoadData<TourModel, dynamic>("dbo.spTour_Get", new { id });
 
             return tour.FirstOrDefault();
+        }
+
+        public Task<IEnumerable<TourModel>> GetBest()
+        {
+            return _sqlDataAccess.LoadData<TourModel, dynamic>("dbo.spTour_GetBest", new { });
+        }
+
+        public Task<IEnumerable<GroupedTours>> GetCountryGroups()
+        {
+            return _sqlDataAccess.LoadData<GroupedTours, dynamic>("dbo.spTour_GroupCountry", new { });
         }
     }
 }

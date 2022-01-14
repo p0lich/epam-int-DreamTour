@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,18 @@ namespace EPAM.DreamTour.DataAccess.DbAccess
             using (IDbConnection connection = new SqlConnection(_configuration.GetConnectionString(connectionId)))
             {
                 return await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task<IDictionary<T, U>> LoadData<T, U, V>(string storedProcedure, V parameters, string connectionId = "Default")
+        {
+            using (IDbConnection connection = new SqlConnection(_configuration.GetConnectionString(connectionId)))
+            {
+                var collection = await connection.QueryAsync<T, U, KeyValuePair<T, U>>(storedProcedure, (s, i) => new KeyValuePair<T, U>(s, i));
+
+                var dict = collection.ToDictionary(kv => kv.Key, kv => kv.Value);
+
+                return dict;
             }
         }
 

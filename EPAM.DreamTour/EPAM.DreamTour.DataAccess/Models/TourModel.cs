@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EPAM.DreamTour.DataAccess.Models
 {
-    public class Tour
+    public class TourModel
     {
         public Guid Id { get; set; }
 
