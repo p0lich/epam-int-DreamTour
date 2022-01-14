@@ -64,8 +64,12 @@
     <Build Include="dbo\Tables\Tour.sql" />
     <Build Include="dbo\StoredPorcedures\spTour_GetAll.sql" />
     <Build Include="dbo\StoredPorcedures\spTour_Get.sql" />
+    <Build Include="dbo\StoredPorcedures\spTour_GetBest.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TourDB.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="TourDB.refactorlog" />
   </ItemGroup>
 </Project>
