@@ -11,5 +11,6 @@ namespace EPAM.DreamTour.DataAccess.Data
         Task<IEnumerable<TourModel>> GetTours();
         Task<IEnumerable<TourModel>> GetBest();
         Task<IEnumerable<GroupedTours>> GetCountryGroups();
+        Task<IEnumerable<TourModel>> GetFilteredTours(SearchRequest searchRequest);
     }
 }

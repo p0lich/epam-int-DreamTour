@@ -1,4 +1,5 @@
 ﻿using EPAM.DreamTour.DataAccess.Data;
+using EPAM.DreamTour.DataAccess.Models;
 using EPAM.DreamTour.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,13 @@ namespace EPAM.DreamTour.Controllers
             };
 
             return View(mainPageView);
+        }
+
+        public async Task<ActionResult> Search(SearchRequest searchRequest)
+        {
+            var foundedTours = await _tourData.GetFilteredTours(searchRequest);
+
+            return View(foundedTours);
         }
     }
 }

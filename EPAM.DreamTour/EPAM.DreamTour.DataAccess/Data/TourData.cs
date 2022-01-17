@@ -38,5 +38,22 @@ namespace EPAM.DreamTour.DataAccess.Data
         {
             return _sqlDataAccess.LoadData<GroupedTours, dynamic>("dbo.spTour_GroupCountry", new { });
         }
+
+        public Task<IEnumerable<TourModel>> GetFilteredTours(SearchRequest searchRequest)
+        {
+            var parameters = new
+            {
+                country = searchRequest.Country,
+                region = searchRequest.Region,
+                district = searchRequest.District,
+                city = searchRequest.City,
+                minimalPrice = searchRequest.MinimalPrice,
+                maximumPrice = searchRequest.MaximumPrice,
+                daysCount = searchRequest.DaysCount,
+                beginDate = searchRequest.BeginDate
+            };
+
+            return _sqlDataAccess.LoadData<TourModel, dynamic>("dbo.spTour_GetFiltered", parameters);
+        }
     }
 }

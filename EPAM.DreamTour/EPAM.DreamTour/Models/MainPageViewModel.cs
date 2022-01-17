@@ -8,5 +8,7 @@ namespace EPAM.DreamTour.Models
         public IEnumerable<TourModel> BestTours { get; set; }
 
         public IEnumerable<GroupedTours> CountryGroups { get; set; }
+
+        public SearchRequest SearchRequest { get; set; }
     }
 }

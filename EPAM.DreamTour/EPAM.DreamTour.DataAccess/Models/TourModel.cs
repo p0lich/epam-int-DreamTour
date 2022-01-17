@@ -20,7 +20,7 @@ namespace EPAM.DreamTour.DataAccess.Models
 
         public int MaximumPrice { get; set; }
 
-        public int DaysCount { get; set; }
+        public short DaysCount { get; set; }
 
         public DateTime BeginDate { get; set; }
     }
