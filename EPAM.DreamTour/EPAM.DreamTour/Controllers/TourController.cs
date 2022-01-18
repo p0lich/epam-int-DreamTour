@@ -71,7 +71,18 @@ namespace EPAM.DreamTour.Controllers
 
         public async Task<ActionResult> Search(SearchRequest searchRequest)
         {
-            string searchIdsRecordKey = $"DreamTour_SearchIds_{DateTime.Now.ToString("dd-MM-yyyy-hh:mm")}";
+            string keyPart = $"" +
+                $"{searchRequest.Country}-" +
+                $"-{searchRequest.Region}-" +
+                $"-{searchRequest.District}-" +
+                $"-{searchRequest.Region}-" +
+                $"-{searchRequest.City}-" +
+                $"-{searchRequest.MinimalPrice}-" +
+                $"-{searchRequest.MaximumPrice}-" +
+                $"-{searchRequest.DaysCount}-" +
+                $"-{searchRequest.BeginDate}";
+
+            string searchIdsRecordKey = $"DreamTour_SearchIds_{keyPart}_{DateTime.Now.ToString("dd-MM-yyyy-hh:mm")}";
 
             var searchIds = await _cache.GetRecordAsync<IEnumerable<Guid>>(searchIdsRecordKey);
 
