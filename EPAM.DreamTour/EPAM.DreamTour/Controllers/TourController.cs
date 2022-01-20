@@ -69,8 +69,17 @@ namespace EPAM.DreamTour.Controllers
             return View(mainPageView);
         }
 
-        public async Task<ActionResult> Search(SearchRequest searchRequest)
+        public async Task<ActionResult> Search([FromQuery] SearchRequest searchRequest, int pageId = 1)
         {
+            ViewData["CountryParameter"] = searchRequest.Country;
+            ViewData["RegionParameter"] = searchRequest.Region;
+            ViewData["DistrictParameter"] = searchRequest.District;
+            ViewData["CityParameter"] = searchRequest.City;
+            ViewData["MinimalPriceParameter"] = searchRequest.MinimalPrice;
+            ViewData["MaximumPriceParameter"] = searchRequest.MaximumPrice;
+            ViewData["DaysCountParameter"] = searchRequest.DaysCount;
+            ViewData["BeginDateParameter"] = searchRequest.BeginDate;
+
             string keyPart = $"" +
                 $"{searchRequest.Country}-" +
                 $"-{searchRequest.Region}-" +
@@ -99,7 +108,26 @@ namespace EPAM.DreamTour.Controllers
                 foundedTours = searchIds.Select(id => _tourData.Get(id).Result);
             }
 
-            return View(foundedTours);
+            var sortedSearchResults = foundedTours
+                .OrderBy(t => t.BeginDate)
+                .ThenBy(t => (t.MaximumPrice + t.MinimalPrice) / 2).ToList();
+
+            var paginatedModel = PaginationModel<TourModel>.GetPageItems(sortedSearchResults, pageId, 20);
+
+            return View(paginatedModel);
+        }
+
+        public ActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(CreateTourModel model)
+        {
+            await _tourData.Add(model);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

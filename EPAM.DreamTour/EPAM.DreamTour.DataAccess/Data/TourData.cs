@@ -55,5 +55,10 @@ namespace EPAM.DreamTour.DataAccess.Data
 
             return _sqlDataAccess.LoadData<TourModel, dynamic>("dbo.spTour_GetFiltered", parameters);
         }
+
+        public async Task Add(CreateTourModel tour)
+        {
+            await _sqlDataAccess.SaveData<CreateTourModel>("dbo.spTour_Add", tour);
+        }
     }
 }
