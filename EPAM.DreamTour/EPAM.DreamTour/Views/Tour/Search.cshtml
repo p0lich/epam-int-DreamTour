@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EPAM.DreamTour.DataAccess.Models.TourModel>
+﻿@model PaginationModel<EPAM.DreamTour.DataAccess.Models.TourModel>
 
 @{
     ViewData["Title"] = "Search";
@@ -6,42 +6,7 @@
 
 <h1>Search</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Region)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.District)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MinimalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaximumPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DaysCount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BeginDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
@@ -76,3 +41,31 @@
 }
     </tbody>
 </table>
+
+@{
+    var navigationIndexes = Model.GetNavigationIndexes(Model.PageIndex);
+}
+
+<ul class="pagination">
+    @foreach (var index in navigationIndexes)
+    {   
+            if (index == Model.PageIndex)
+            {
+                <li class="page-item"><a class="btn btn-primary disabled">@index</a></li>
+                continue;
+            }
+    
+             <li class="page-item"><form asp-action="Search" method="get">
+                 <input type="hidden" name="Country" value="@ViewData["CountryParameter"]" />
+                 <input type="hidden" name="Region" value="@ViewData["RegionParameter"]" />
+                 <input type="hidden" name="District" value="@ViewData["DistrictParameter"]" />
+                 <input type="hidden" name="City" value="@ViewData["CityParameter"]" />
+                 <input type="hidden" name="MinimalPrice" value="@ViewData["MinimalPriceParameter"]" />
+                 <input type="hidden" name="MaximumPrice" value="@ViewData["MaximumPriceParameter"]" />
+                 <input type="hidden" name="DaysCount" value="@ViewData["DaysCountParameter"]" />
+                 <input type="hidden" name="BeginDate" value="@ViewData["BeginDateParameter"]" />
+                 <input type="submit" name="pageId" value="@index" class="btn btn-primary"/>
+             </form></li>
+         
+    }
+</ul>

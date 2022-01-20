@@ -4,6 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
+<p>
+    <a asp-action="Add">Add New Tour</a>
+</p>
+
 <h1>Random offers</h1>
 
 <table class="table">
@@ -40,16 +44,15 @@
                 </tr>
           }
     </tbody>
+</table>
 
+<table>
     <tbody>
             @foreach (var item in Model.CountryGroups) {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Country)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Count)
-                        </td>
+                        <td>@Html.ActionLink(string.Format($"{item.Country}({item.Count})"), "Search",
+                        new EPAM.DreamTour.DataAccess.Models.SearchRequest()
+                            { Country = item.Country })</td>
                     </tr>
             }
     </tbody>
@@ -63,42 +66,42 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="SearchRequest.Country" class="control-label"></label>
-                <input asp-for="SearchRequest.Country" class="form-control" />
+                <input asp-for="SearchRequest.Country" class="form-control" name="Country" />
                 <span asp-validation-for="SearchRequest.Country" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SearchRequest.Region" class="control-label"></label>
-                <input asp-for="SearchRequest.Region" class="form-control" />
+                <input asp-for="SearchRequest.Region" class="form-control" name="Region" />
                 <span asp-validation-for="SearchRequest.Region" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SearchRequest.District" class="control-label"></label>
-                <input asp-for="SearchRequest.District" class="form-control" />
+                <input asp-for="SearchRequest.District" class="form-control" name="District" />
                 <span asp-validation-for="SearchRequest.District" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SearchRequest.City" class="control-label"></label>
-                <input asp-for="SearchRequest.City" class="form-control" />
+                <input asp-for="SearchRequest.City" class="form-control" name="City" />
                 <span asp-validation-for="SearchRequest.City" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SearchRequest.MinimalPrice" class="control-label"></label>
-                <input asp-for="SearchRequest.MinimalPrice" class="form-control" />
+                <input asp-for="SearchRequest.MinimalPrice" class="form-control" name="MinimalPrice" />
                 <span asp-validation-for="SearchRequest.MinimalPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SearchRequest.MaximumPrice" class="control-label"></label>
-                <input asp-for="SearchRequest.MaximumPrice" class="form-control" />
+                <input asp-for="SearchRequest.MaximumPrice" class="form-control" name="MaximumPrice" />
                 <span asp-validation-for="SearchRequest.MaximumPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SearchRequest.DaysCount" class="control-label"></label>
-                <input asp-for="SearchRequest.DaysCount" class="form-control" />
+                <input asp-for="SearchRequest.DaysCount" class="form-control" name="DaysCount" />
                 <span asp-validation-for="SearchRequest.DaysCount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SearchRequest.BeginDate" class="control-label"></label>
-                <input asp-for="SearchRequest.BeginDate" class="form-control" />
+                <input asp-for="SearchRequest.BeginDate" class="form-control" name="BeginDate" />
                 <span asp-validation-for="SearchRequest.BeginDate" class="text-danger"></span>
             </div>
             <div class="form-group">
