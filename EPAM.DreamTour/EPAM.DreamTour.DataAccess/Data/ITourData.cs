@@ -13,5 +13,7 @@ namespace EPAM.DreamTour.DataAccess.Data
         Task<IEnumerable<GroupedTours>> GetCountryGroups();
         Task<IEnumerable<TourModel>> GetFilteredTours(SearchRequest searchRequest);
         Task Add(CreateTourModel tour);
+        Task<IEnumerable<string>> GetCountryRegions(string country);
+        Task<IEnumerable<string>> GetRegionCities(string region);
     }
 }

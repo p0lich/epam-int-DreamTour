@@ -60,5 +60,16 @@ namespace EPAM.DreamTour.DataAccess.Data
         {
             await _sqlDataAccess.SaveData<CreateTourModel>("dbo.spTour_Add", tour);
         }
+
+        public async Task<IEnumerable<string>> GetCountryRegions(string country)
+        {
+            //var a = await _sqlDataAccess.LoadData<string, string>("dbo.spTour_GetCountryRegions", country);
+            return await _sqlDataAccess.LoadData<string, dynamic>("dbo.spTour_GetCountryRegions", (object)new { country });
+        }
+
+        public async Task<IEnumerable<string>> GetRegionCities(string region)
+        {
+            return await _sqlDataAccess.LoadData<string, dynamic>("dbo.spTour_GetRegionCities", new { region });
+        }
     }
 }
