@@ -10,7 +10,7 @@ variables:
   SOURCE_CODE_PATH: 'EPAM.DreamTour'
 
 before_script:
-  - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
+  - 'dotnet restore'
 
 build:
   stage: build
