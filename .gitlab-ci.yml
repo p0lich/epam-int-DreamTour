@@ -1,4 +1,4 @@
-job:
+default:
   tags:
     - gitlab-runner
 
