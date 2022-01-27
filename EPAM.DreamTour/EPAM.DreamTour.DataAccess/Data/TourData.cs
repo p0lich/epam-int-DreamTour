@@ -63,8 +63,7 @@ namespace EPAM.DreamTour.DataAccess.Data
 
         public async Task<IEnumerable<string>> GetCountryRegions(string country)
         {
-            //var a = await _sqlDataAccess.LoadData<string, string>("dbo.spTour_GetCountryRegions", country);
-            return await _sqlDataAccess.LoadData<string, dynamic>("dbo.spTour_GetCountryRegions", (object)new { country });
+            return await _sqlDataAccess.LoadData<string, dynamic>("dbo.spTour_GetCountryRegions", new { country });
         }
 
         public async Task<IEnumerable<string>> GetRegionCities(string region)
