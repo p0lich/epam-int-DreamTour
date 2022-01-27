@@ -1,6 +1,6 @@
-default:
-  tags:
-    - my-runner
+#default:
+#  tags:
+#    - my-runner
 
 image: mcr.microsoft.com/dotnet/core/sdk:3.1
 
