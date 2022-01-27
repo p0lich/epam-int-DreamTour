@@ -7,7 +7,6 @@ stages:
 
 before_script:
   - "cd EPAM.DreamTour"
-  - "dotnet restore"
 
 build:
   stage: build
