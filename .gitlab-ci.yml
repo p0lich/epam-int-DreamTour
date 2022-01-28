@@ -37,7 +37,7 @@ production:
     - |
       echo -e "if((Get-WebSiteState -Name $application_pool_name).Value -ne 'Stopped'){"
       echo -e "Write-Output ('Stopping WebSite: {0}' -f $application_pool_name)"
-      Stop-WebSite -Name $application_pool_name}"
+      echo -e "Stop-WebSite -Name $application_pool_name}"
     - |
       echo -e "if((Get-WebAppPoolState -Name $application_pool_name).Value -ne 'Stopped'){"
       echo -e "Write-Output ('Stopping Application Pool: {0}' -f $application_pool_name)"
