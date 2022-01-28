@@ -11,6 +11,9 @@ stages:
   - tests
   - deploy
   
+before_script:
+  - "cd EPAM.DreamTour"
+
 build:
   stage: build
   script:
