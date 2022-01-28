@@ -1,4 +1,4 @@
-iamge: mcr.microsoft.com/dotnet/core/sdk:3.1
+image: mcr.microsoft.com/dotnet/core/sdk:3.1
 
 variables:
   publish_path: '.\publish\$CI_PIPELINE_ID\'
