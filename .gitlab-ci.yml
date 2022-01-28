@@ -19,7 +19,7 @@ build:
     - dotnet build
   artifacts:
     paths:
-      - build-artifacts
+      - EPAM.DreamTour/build-artifacts
 
 test:
   stage: test
