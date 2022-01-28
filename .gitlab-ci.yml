@@ -21,15 +21,11 @@ build:
     paths:
       - $publish_path
     expire_in: '1 week'
-  tags:
-    - dotnet
 
 unit-test:
   stage: tests
   script:
     - dotnet test --no-build --verbosity normal
-  tags:
-    - dotnet
   needs: [build]
 
 production:
@@ -57,8 +53,6 @@ production:
       Write-Output ('Starting WebSite: {0}' -f $application_pool_name)
       Start-WebSite -Name $application_pool_name
       }
-  tags:
-    - dotnet
   needs: [unit-test, build]
   when: manual
   dependencies:
