@@ -19,7 +19,7 @@ build:
   script:
     - dotnet restore
     - dotnet build --no-restore
-    - dotnet publish .\EPAM.DreamTour\EPAM.DreamTour.sln -c Release -o $publish_path
+    - dotnet publish EPAM.DreamTour.sln -c Release -o $publish_path
   artifacts:
     paths:
       - $publish_path
