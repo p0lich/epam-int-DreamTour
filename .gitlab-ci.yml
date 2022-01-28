@@ -35,15 +35,23 @@ production:
   stage: deploy
   script:
     - |
-      if((Get-WebSiteState -Name $application_pool_name).Value -ne 'Stopped'){ Write-Output ('Stopping WebSite: {0}' -f $application_pool_name)Stop-WebSite -Name $application_pool_name}
+      echo -e "if((Get-WebSiteState -Name $application_pool_name).Value -ne 'Stopped'){"
+      echo -e "Write-Output ('Stopping WebSite: {0}' -f $application_pool_name)"
+      Stop-WebSite -Name $application_pool_name}"
     - |
-      if((Get-WebAppPoolState -Name $application_pool_name).Value -ne 'Stopped'){Write-Output ('Stopping Application Pool: {0}' -f $application_pool_name)Stop-WebAppPool -Name $application_pool_name}
+      echo -e "if((Get-WebAppPoolState -Name $application_pool_name).Value -ne 'Stopped'){"
+      echo -e "Write-Output ('Stopping Application Pool: {0}' -f $application_pool_name)"
+      echo -e "Stop-WebAppPool -Name $application_pool_name}"
     - "Copy-Item $published_data_path -Destination $iis_worker_path -Force"
     - "Start-Sleep -s 5"
     - |
-      if((Get-WebAppPoolState -Name $application_pool_name).Value -ne 'Started'){Write-Output ('Starting Application Pool: {0}' -f $application_pool_name)Start-WebAppPool -Name $application_pool_name}
+      echo -e "if((Get-WebAppPoolState -Name $application_pool_name).Value -ne 'Started'){"
+      echo -e "Write-Output ('Starting Application Pool: {0}' -f $application_pool_name)"
+      echo -e "Start-WebAppPool -Name $application_pool_name}"
     - |
-      if((Get-WebSiteState -Name $application_pool_name).Value -ne 'Started'){Write-Output ('Starting WebSite: {0}' -f $application_pool_name)Start-WebSite -Name $application_pool_name}
+      echo -e "if((Get-WebSiteState -Name $application_pool_name).Value -ne 'Started'){"
+      echo -e "Write-Output ('Starting WebSite: {0}' -f $application_pool_name)"
+      echo -e "Start-WebSite -Name $application_pool_name}"
   needs: [unit-test, build]
   when: manual
   dependencies:
