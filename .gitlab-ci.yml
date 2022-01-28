@@ -17,6 +17,8 @@ build:
   stage: build
   script:
     - dotnet build
+  artifacts:
+    - build-artifacts/*
 
 test:
   stage: test
