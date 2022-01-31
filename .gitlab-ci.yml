@@ -28,7 +28,7 @@ build:
 unit-test:
   stage: tests
   script:
-    - dotnet test --no-build --verbosity normal
+    - dotnet test --no-build
   needs: [build]
 
 production:
