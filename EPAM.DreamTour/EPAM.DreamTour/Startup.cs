@@ -33,10 +33,12 @@ namespace EPAM.DreamTour
             services.AddDbContext<TourContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
-            });
+            }, ServiceLifetime.Singleton);
 
-            services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
-            services.AddSingleton<ITourData, TourData>();
+            services.AddSingleton<ITourData, EFTourData>();
+
+            //services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
+            //services.AddSingleton<ITourData, TourData>();
 
             services.AddStackExchangeRedisCache(options =>
             {
