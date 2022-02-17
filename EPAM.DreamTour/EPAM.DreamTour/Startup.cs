@@ -36,6 +36,7 @@ namespace EPAM.DreamTour
             }, ServiceLifetime.Singleton);
 
             services.AddSingleton<ITourData, EFTourData>();
+            services.AddMemoryCache();
 
             //services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
             //services.AddSingleton<ITourData, TourData>();

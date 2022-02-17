@@ -1,5 +1,6 @@
 ﻿using EPAM.DreamTour.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace EPAM.DreamTour.DataAccess.Data
     public class EFTourData : ITourData
     {
         private TourContext _tourContext;
+        private IMemoryCache _cache;
 
-        public EFTourData(TourContext tourContext)
+        public EFTourData(TourContext tourContext, IMemoryCache cache)
         {
             _tourContext = tourContext;
+            _cache = cache;
         }
 
         public async Task Add(CreateTourModel tour)
@@ -30,7 +33,17 @@ namespace EPAM.DreamTour.DataAccess.Data
                 DaysCount = tour.DaysCount,
                 BeginDate = tour.BeginDate
             });
-            await _tourContext.SaveChangesAsync();
+
+            int addCount = await _tourContext.SaveChangesAsync();
+
+            if (addCount > 0)
+            {
+                _cache.Set($"MemoryCache_DreamTour_Add_{DateTime.Now.ToString("dd - MM - yyyy - hh:mm")}",
+                    tour, new MemoryCacheEntryOptions()
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
+            }
         }
 
         public async Task<TourModel> Get(Guid id)
@@ -40,21 +53,42 @@ namespace EPAM.DreamTour.DataAccess.Data
 
         public async Task<IEnumerable<TourModel>> GetBest()
         {
-            return await _tourContext.Tour.OrderBy(t => Guid.NewGuid()).Take(3).ToListAsync();
+            if (!_cache.TryGetValue($"MemoryCache_DreamTour_GetBest_{DateTime.Now.ToString("dd - MM - yyyy - hh:mm")}",
+                out IEnumerable<TourModel> bestTours))
+            {
+                bestTours = await _tourContext.Tour
+                    .OrderBy(t => Guid.NewGuid())
+                    .Take(3)
+                    .ToListAsync();
+
+                if (bestTours != null)
+                {
+                    _cache.Set($"MemoryCache_DreamTour_GetBest_{DateTime.Now.ToString("dd - MM - yyyy - hh:mm")}",
+                        bestTours, new MemoryCacheEntryOptions()
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                    });
+                }
+            }
+
+            return bestTours;
         }
 
         public async Task<IEnumerable<GroupedTours>> GetCountryGroups()
         {
-            return await _tourContext.Tour.Select(t => new GroupedTours()
-            {
-                Country = t.Country,
-                Count = _tourContext.Tour.Count(st => st.Country == t.Country)
-            }).Distinct().ToListAsync();
+            return await _tourContext.Tour
+                .GroupBy(t => t.Country)
+                .Select(g => new GroupedTours()
+                {
+                    Country = g.Key,
+                    Count = g.Count()
+                }).ToListAsync();
         }
 
         public async Task<IEnumerable<string>> GetCountryRegions(string country)
         {
-            return await _tourContext.Tour.Where(t => t.Country == country)
+            return await _tourContext.Tour
+                .Where(t => t.Country == country)
                 .Select(t => t.Region)
                 .Distinct()
                 .ToListAsync();
@@ -77,7 +111,8 @@ namespace EPAM.DreamTour.DataAccess.Data
 
         public async Task<IEnumerable<string>> GetRegionCities(string region)
         {
-            return await _tourContext.Tour.Where(t => t.Region == region)
+            return await _tourContext.Tour
+                .Where(t => t.Region == region)
                 .Select(t => t.Region)
                 .Distinct()
                 .ToListAsync();
