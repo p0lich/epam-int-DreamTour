@@ -1,16 +1,58 @@
 image: mcr.microsoft.com/dotnet/core/sdk:3.1
 
+variables:
+  publish_path: 'EPAM.DreamTour\publish\$CI_PIPELINE_ID\'
+  published_data_path: 'EPAM.DreamTour\publish\$CI_PIPELINE_ID\*.*'
+  application_pool_name: 'DreamTour'
+  iis_worker_path: 'C:\Temp\sites\DreamTour'
+
 stages:
   - build
-  - test
-  - release
+  - tests
+  - deploy
+  
+before_script:
+  - "cd EPAM.DreamTour"
 
 build:
   stage: build
   script:
-    - dotnet build
+    - dotnet restore
+    - dotnet build --no-restore
+    - dotnet publish EPAM.DreamTour.sln -c Release -o $publish_path
+  artifacts:
+    paths:
+      - $publish_path
+    expire_in: '1 week'
 
-test:
-  stage: test
+unit-test:
+  stage: tests
   script:
-    - dotnet test
+    - dotnet test --no-build
+  needs: [build]
+
+production:
+  stage: deploy
+  script:
+    - |
+      echo -e "if((Get-WebSiteState -Name $application_pool_name).Value -ne 'Stopped'){"
+      echo -e "Write-Output ('Stopping WebSite: {0}' -f $application_pool_name)"
+      echo -e "Stop-WebSite -Name $application_pool_name}"
+    - |
+      echo -e "if((Get-WebAppPoolState -Name $application_pool_name).Value -ne 'Stopped'){"
+      echo -e "Write-Output ('Stopping Application Pool: {0}' -f $application_pool_name)"
+      echo -e "Stop-WebAppPool -Name $application_pool_name}"
+    - "Copy-Item $published_data_path -Destination $iis_worker_path -Force"
+    - "Start-Sleep -s 5"
+    - |
+      echo -e "if((Get-WebAppPoolState -Name $application_pool_name).Value -ne 'Started'){"
+      echo -e "Write-Output ('Starting Application Pool: {0}' -f $application_pool_name)"
+      echo -e "Start-WebAppPool -Name $application_pool_name}"
+    - |
+      echo -e "if((Get-WebSiteState -Name $application_pool_name).Value -ne 'Started'){"
+      echo -e "Write-Output ('Starting WebSite: {0}' -f $application_pool_name)"
+      echo -e "Start-WebSite -Name $application_pool_name}"
+  needs: [unit-test, build]
+  when: manual
+  dependencies:
+    - build
