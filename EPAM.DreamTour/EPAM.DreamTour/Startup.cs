@@ -3,6 +3,7 @@ using EPAM.DreamTour.DataAccess.DbAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,8 +30,16 @@ namespace EPAM.DreamTour
             services.AddControllersWithViews();
             services.AddMvc();
 
-            services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
-            services.AddSingleton<ITourData, TourData>();
+            services.AddDbContext<TourContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+            }, ServiceLifetime.Singleton);
+
+            services.AddSingleton<ITourData, EFTourData>();
+            services.AddMemoryCache();
+
+            //services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
+            //services.AddSingleton<ITourData, TourData>();
 
             services.AddStackExchangeRedisCache(options =>
             {

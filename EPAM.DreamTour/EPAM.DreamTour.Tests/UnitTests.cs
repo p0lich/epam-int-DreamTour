@@ -21,11 +21,8 @@ namespace EPAM.DreamTour.Tests
         {
             using (var mock = AutoMock.GetLoose())
             {
-                string country = "Canada";
-
                 mock.Mock<ISqlDataAccess>()
                     .Setup(x => x.LoadData<string, dynamic>("dbo.spTour_GetCountryRegions",
-                                                            // new { country },
                                                             It.IsAny<object>(),
                                                             "Default"))
                     .Returns(TestData.GetCanadaTestRegions());
@@ -37,21 +34,6 @@ namespace EPAM.DreamTour.Tests
 
                 Assert.AreEqual(expected.Count(), actual.Count());
             }
-
-            //var mockSqlAccess = new Mock<ISqlDataAccess>();
-
-            //mockSqlAccess
-            //    .Setup(x => x.LoadData<string, dynamic>("dbo.spTour_GetCountryRegions",
-            //                                            new { Country = "Canada" },
-            //                                            "Default"))
-            //    .Returns(TestData.GetCanadaTestRegions());
-
-            //var dataAccess = new TourData(mockSqlAccess.Object);
-
-            //var expected = TestData.GetCanadaTestRegions();
-            //var actual = dataAccess.GetCountryRegions("Canada");
-
-            //Assert.AreEqual(expected.Result.Count(), actual.Result.Count());
         }
 
         [TestMethod]
@@ -83,11 +65,8 @@ namespace EPAM.DreamTour.Tests
         {
             using (var mock = AutoMock.GetLoose())
             {
-                string region = "British Columbia";
-
                 mock.Mock<ISqlDataAccess>()
                     .Setup(x => x.LoadData<string, dynamic>("dbo.spTour_GetRegionCities",
-                                                            //new { region },
                                                             It.IsAny<object>(),
                                                             "Default"))
                     .Returns(TestData.GetBritishColumbiaCities());
@@ -108,7 +87,6 @@ namespace EPAM.DreamTour.Tests
             {
                 mock.Mock<ISqlDataAccess>()
                     .Setup(x => x.LoadData<string, dynamic>("dbo.spTour_GetRegionCities",
-                                                            //new { region },
                                                             It.IsAny<object>(),
                                                             "Default"))
                     .Returns(TestData.GetEmptyCollection());
