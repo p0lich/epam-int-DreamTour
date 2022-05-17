@@ -13,4 +13,4 @@
 
 ## База данных
 
-Сылка на базу данных: https://drive.google.com/file/d/1f4ftZKb1IKlPINKZp4trZotzvChGtBZa/view?usp=sharing
+Сылка на базу данных: https://drive.google.com/file/d/1_S-uAtiy2IHPQwMTsvsmBJ2HwX80_wO1/view?usp=sharing
